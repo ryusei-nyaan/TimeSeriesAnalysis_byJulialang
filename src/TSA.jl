@@ -2,7 +2,7 @@ module TSA
 using Statistics
 using Distributions
 using LinearAlgebra
-
+using Random
 
 function DFT(x)
     N = length(x)
@@ -27,6 +27,7 @@ function hanning(x)
     wind = map(x->x+0.5,-0.5*cos.(2π*n/(N-1)))
     return wind
 end
+
 module NTSA
 function embedding(x,m,τ)
     N = length(x)
@@ -36,6 +37,7 @@ function embedding(x,m,τ)
     end
     return X
 end
+
 function FNN(x,τ,m)
     E = []
     for i = 1:m+1
@@ -78,6 +80,32 @@ function FNN(x,τ,m)
     return E1
 end
 
+function TE(x,τ,m,k,q,M)
+    Etrans = []
+    for i = 1:m
+        X = embedding(x,i,τ)
+        d =zeros(size(X)[1]-τ,k+1)
+        for j = 1:size(X)[1]-τ
+            dist = map(x->x.-X[j,:],X[1:size(X)[1]-τ,:])
+            dist = sum.(abs2,dist[:,1:i])
+            d[j,1:k+1] .= sortperm(dist[:,1])[1:k+1]
+        end
+        Et = []
+        d = Int.(d)
+        for j = 1:q
+            rn = map(Int,rand(1:size(X)[1]-τ,M))
+            E = []
+            for n in rn
+                v = X[d[n,:].+τ,:] .- X[d[n,:],:]
+                v̄ = sum(v,dims=1)/(k+1)
+                E = push!(E,sum(abs2,(v.-v̄))/((k+1)*sum(abs2,v̄)))
+            end
+            Et = push!(Et,median(E))
+        end
+        Etrans = push!(Etrans,mean(Et))
+    end
+    return Etrans
+end
 
 end
 end
