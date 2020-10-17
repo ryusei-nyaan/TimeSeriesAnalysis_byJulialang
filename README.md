@@ -30,3 +30,6 @@ TE is "translation error" which confirm determinism in your time series.
 x is Array, tau means the time-delay, m is maximum dimension, k means nearest neighbors.
 q means the counts of calculation and the average of that results is return of this function.
 M is the number of sampling of datasets from your reconstructed time-series. The median of this sampling is one of the calculations repeated q times. 
+If return of this function are low relatively throughout embedding dimensions you researched, your time-series might be deterministic.
+Furthermore, the appropriate dimension is thought to be the dimension whose return of this function is lowest.
+
