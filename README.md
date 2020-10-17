@@ -13,9 +13,8 @@ hamming(x) is hamming window. x is Array.
 hanning(x) is hanning window. x is Array.
 
 
-### NTSA
-NTSA is nonlinear time series analysis. 
 
+### Nonlinear time series analysis
 
 #### embedding(x,m,tau)
 embedding is transformation of time-series into phase-space.
