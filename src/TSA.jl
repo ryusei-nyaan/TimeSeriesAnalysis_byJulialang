@@ -87,9 +87,12 @@ function TE(x,τ,m,k,q,M)
         X = embedding(x,i,τ)
         d =zeros(size(X)[1]-τ,k+1)
         for j = 1:size(X)[1]-τ
-            dist = map(x->x.-X[j,:],X[1:size(X)[1]-τ,:])
-            dist = sum.(abs2,dist[:,1:i])
-            d[j,1:k+1] .= sortperm(dist[:,1])[1:k+1]
+            dist = zeros(size(X)[1]-τ)
+            for l = 1:size(X)[1]-τ 
+                dist[l] = norm(X[j,:]-X[l,:])
+            end
+            
+            d[j,1:k+1] .= sortperm(dist)[1:k+1]
         end
         Et = []
         d = Int.(d)
