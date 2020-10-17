@@ -1,4 +1,5 @@
 module TSA
+
 using Statistics
 using Distributions
 using LinearAlgebra
@@ -28,7 +29,7 @@ function hanning(x)
     return wind
 end
 
-module NTSA
+
 function embedding(x,m,τ)
     N = length(x)
     X = zeros(N-(m-1)τ,m)
@@ -107,5 +108,5 @@ function TE(x,τ,m,k,q,M)
     return Etrans
 end
 
-end
+
 end
