@@ -4,6 +4,7 @@ using Statistics
 using Distributions
 using LinearAlgebra
 using Random
+using Flux
 
 function DFT(x)
     N = length(x)
@@ -109,6 +110,61 @@ function TE(x,τ,m,k,q,M)
         Etrans = push!(Etrans,mean(Et))
     end
     return Etrans
+end
+
+function MaxLyapunov(x,m,τ,itr,k,meth=0,epoch=100)
+    σ = std(x)
+    X = embedding(x,m,τ)
+    N = size(X)[1]-1
+    ϵ1 = 0
+    if meth == 0
+        X̂ = copy(X[1:N,:])
+        for j = 1:itr
+            d = zeros(BigInt,N,k)
+            for i = 1:N
+                dist = zeros(N)
+                for l = 1:N
+                    dist[l] = norm(X̂[i,:]-X[l,:])
+                end
+                d[i,1:k] = sortperm(dist)[2:k+1]
+                X̂[i,:] .= sum(X[d[i,:].+1,:])/k
+            end
+            if j==1
+                ϵ1 = sqrt(sum((X[1+j:end,1].-X̂[1:end,1]).^2)/N)/σ
+            end
+        end
+        ϵ = sqrt(sum((X[1+itr:end,1].-X̂[1:end-itr+1,1]).^2)/(size(X)[1]-itr))/σ
+    elseif meth==1
+        X̂ = copy(X[1:end-1,:])
+        m2 = 2*m
+        d1 = Dense(m,m2,sigmoid) |>f64
+        d2 = Dense(m2,m) |>f64
+        model = Chain(d1,d2)
+        loss(x,x̂) = Flux.Losses.mse(model(x),x̂)
+        ps = params(model)
+        opt = Descent()
+        xt = []
+        yt = []
+        for i = 1:N
+            xt = push!(xt,X̂[i,:])
+            yt = push!(yt,X[i+1,:])
+        end
+        for i = 1:epoch
+            data = zip(xt,yt)
+            Flux.train!(loss,ps,data,opt)
+        end
+        for j = 1:itr
+            for i = 1:N-j
+                X̂[i,:] = model(X̂[i,:])
+            end
+            if j==1
+                ϵ1 = sqrt(sum((X[1+j:end,1].-X̂[1:N-j+1,1]).^2)/N)/σ
+            end
+        end
+        ϵ = sqrt(sum((X[1+itr:end,1].-X̂[1:end-itr+1,1]).^2)/(size(X)[1]-itr))/σ
+    end
+    λ = log(ϵ/ϵ1)/(itr-1)
+    return λ
 end
 
 
