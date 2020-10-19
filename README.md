@@ -36,6 +36,5 @@ Furthermore, the appropriate dimension is thought to be the dimension whose retu
 This function is the estimation of maximum lyapunov exponent.  
 x is Array, m is the embedding dimension, tau is the time-delay, itr means the iteration of predicting reconstructed vectors.   
 The default is "meth=0". If meth is 1, we predict the reconstructed vector by neural network.   
-In this case, we estimate the dynamics of our time-series, so this function don't do cross-validation.  
-Also, it is thought that we don't have to take care of overfitting.  
+In this case, we estimate the dynamics of our time-series.  
 Finaly, epoch means counts of descent method.  
