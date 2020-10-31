@@ -16,6 +16,17 @@ function DFT(x)
     return X̂
 end
 
+function IDFT(x)
+    N = length(x)
+    X = zeros(Complex,N)
+    μ = collect(Int64,0:1:N-1)
+    for i = 1:N
+        X .+= x[i]/N*(exp(2π*im*(i-1)/N)).^μ
+    end
+    return real(X)
+end
+
+
 function hamming(x)
     N = length(x)
     n = collect(Int64,0:1:N-1)
@@ -167,5 +178,17 @@ function MaxLyapunov(x,m,τ,itr,k,meth=0,epoch=100)
     return λ
 end
 
-
+function surrogate(x,m,τ,itr,c)
+    N = length(x)
+    E = []E0 = MaxLyapunov(x,m,τ,itr,1,1)
+    for i = 1:c
+        sX = copy(x)
+        fsX = DFT(sX)
+        fsX = fsX.*exp(2*π*im).^rand(Float64,N)
+        sX = IDFT(fsX)sX = real(sX)
+        E1 = MaxLyapunov(sX,m,τ,itr,1,1)
+        E = push!(E,E1)
+        end
+    t = (E0-mean(E))/(std(E)/(c^0.5))
+    return tend
 end
