@@ -190,5 +190,6 @@ function surrogate(x,m,τ,itr,c)
         E = push!(E,E1)
         end
     t = (E0-mean(E))/(std(E)/(c^0.5))
-    return tend
+    return t
+end
 end
