@@ -180,12 +180,14 @@ end
 
 function surrogate(x,m,τ,itr,c)
     N = length(x)
-    E = []E0 = MaxLyapunov(x,m,τ,itr,1,1)
+    E = []
+    E0 = MaxLyapunov(x,m,τ,itr,1,1)
     for i = 1:c
         sX = copy(x)
         fsX = DFT(sX)
-        fsX = fsX.*exp(2*π*im).^rand(Float64,N)
-        sX = IDFT(fsX)sX = real(sX)
+        fsX = fsX.*(exp(2*π*im)).^rand(Float64,N)
+        sX = IDFT(fsX)
+        sX = real(sX)
         E1 = MaxLyapunov(sX,m,τ,itr,1,1)
         E = push!(E,E1)
         end
