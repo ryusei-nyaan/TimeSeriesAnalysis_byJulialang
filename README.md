@@ -2,6 +2,8 @@
 
 ###### Julia version = 1.5.1 
 
+###### Developing and modifying now.
+
 ## TSA.jl
 ### DFT(x)
 DFT(x) is discrete fourier transformation. x is Array. 
@@ -38,3 +40,4 @@ x is Array, m is the embedding dimension, tau is the time-delay, itr means the i
 The default is "meth=0". If meth is 1, we predict the reconstructed vector by neural network.   
 In this case, we estimate the dynamics of our time-series.  
 Finaly, epoch means counts of descent method.  
+
