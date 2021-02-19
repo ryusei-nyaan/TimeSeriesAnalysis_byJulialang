@@ -44,6 +44,6 @@ Finaly, epoch means counts of descent method.
 #### surrogate(x,m,tau,itr,c)
 This function is a kind of statistical hypothesis test.  
 x is Array, m is the embedding dimension, tau is the time-delay, itr means the iteration of predicting reconstructed vectors, c is the number of surrogate data.  
-Surrogate datum iare generated from original data. First, we counvert the original data into phase-series data by fourier transform, and randomize its phase, lastly convert it into time-series data.  
+Surrogate datum are generated from original data. First, we counvert the original data into phase-series data by fourier transform, and randomize its phase, lastly convert it into the time-series data.  
 This function use the value of MaxLyapunov as the nonlinear statistic.   
 This function returns t-value, so if the hypothesis is rejected, the original data is thought to be nonlinear time-series.  
